@@ -11,17 +11,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LeaguelistImport } from './routes/leaguelist'
 import { Route as DoclistImport } from './routes/doclist'
 import { Route as IndexImport } from './routes/index'
+import { Route as LeaguesIndexImport } from './routes/leagues.index'
+import { Route as LeaguesLeagueIdImport } from './routes/leagues.$leagueId'
 
 // Create/Update Routes
-
-const LeaguelistRoute = LeaguelistImport.update({
-  id: '/leaguelist',
-  path: '/leaguelist',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const DoclistRoute = DoclistImport.update({
   id: '/doclist',
@@ -32,6 +27,18 @@ const DoclistRoute = DoclistImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LeaguesIndexRoute = LeaguesIndexImport.update({
+  id: '/leagues/',
+  path: '/leagues/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LeaguesLeagueIdRoute = LeaguesLeagueIdImport.update({
+  id: '/leagues/$leagueId',
+  path: '/leagues/$leagueId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,11 +60,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DoclistImport
       parentRoute: typeof rootRoute
     }
-    '/leaguelist': {
-      id: '/leaguelist'
-      path: '/leaguelist'
-      fullPath: '/leaguelist'
-      preLoaderRoute: typeof LeaguelistImport
+    '/leagues/$leagueId': {
+      id: '/leagues/$leagueId'
+      path: '/leagues/$leagueId'
+      fullPath: '/leagues/$leagueId'
+      preLoaderRoute: typeof LeaguesLeagueIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/leagues/': {
+      id: '/leagues/'
+      path: '/leagues'
+      fullPath: '/leagues'
+      preLoaderRoute: typeof LeaguesIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -68,41 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
-  '/leaguelist': typeof LeaguelistRoute
+  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
+  '/leagues': typeof LeaguesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
-  '/leaguelist': typeof LeaguelistRoute
+  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
+  '/leagues': typeof LeaguesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
-  '/leaguelist': typeof LeaguelistRoute
+  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
+  '/leagues/': typeof LeaguesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/doclist' | '/leaguelist'
+  fullPaths: '/' | '/doclist' | '/leagues/$leagueId' | '/leagues'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/doclist' | '/leaguelist'
-  id: '__root__' | '/' | '/doclist' | '/leaguelist'
+  to: '/' | '/doclist' | '/leagues/$leagueId' | '/leagues'
+  id: '__root__' | '/' | '/doclist' | '/leagues/$leagueId' | '/leagues/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DoclistRoute: typeof DoclistRoute
-  LeaguelistRoute: typeof LeaguelistRoute
+  LeaguesLeagueIdRoute: typeof LeaguesLeagueIdRoute
+  LeaguesIndexRoute: typeof LeaguesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DoclistRoute: DoclistRoute,
-  LeaguelistRoute: LeaguelistRoute,
+  LeaguesLeagueIdRoute: LeaguesLeagueIdRoute,
+  LeaguesIndexRoute: LeaguesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +136,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/doclist",
-        "/leaguelist"
+        "/leagues/$leagueId",
+        "/leagues/"
       ]
     },
     "/": {
@@ -126,8 +146,11 @@ export const routeTree = rootRoute
     "/doclist": {
       "filePath": "doclist.tsx"
     },
-    "/leaguelist": {
-      "filePath": "leaguelist.tsx"
+    "/leagues/$leagueId": {
+      "filePath": "leagues.$leagueId.tsx"
+    },
+    "/leagues/": {
+      "filePath": "leagues.index.tsx"
     }
   }
 }

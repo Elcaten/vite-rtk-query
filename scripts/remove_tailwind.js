@@ -44,7 +44,7 @@ function removeTailwind() {
     exit()
   }
 
-  const uninstallCommand = 'npm uninstall ' + tailwindPackages.join(' ')
+  const uninstallCommand = 'pnpm remove ' + tailwindPackages.join(' ')
 
   chdir(rootDir)
   // execSync return null when command successful

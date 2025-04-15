@@ -1,10 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router'
 
 import Spinner from '../../components/Spinner'
 import { useGetDocsListQuery } from '../../services/docs'
 
 import styles from './index.module.css'
+import { Link } from '@tanstack/react-router'
 
 const DocumentList: React.FC = () => {
   const { data, error, isLoading } = useGetDocsListQuery()

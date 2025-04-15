@@ -1,21 +1,26 @@
 import React from 'react'
 import { Provider as ReduxStoreProvider } from 'react-redux'
-import { BrowserRouter, Routes, Route } from 'react-router'
-
 import './features/Counter/index.module.css'
-import Counter from './features/Counter/index'
-import DocumentList from './features/DocumentList'
 import { store } from './store'
+
+// Import the generated route tree
+import { routeTree } from './routeTree.gen'
+import { createRouter, RouterProvider } from '@tanstack/react-router'
+
+// Create a new router instance
+const router = createRouter({ routeTree })
+
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
 
 const App: React.FC = () => {
   return (
     <ReduxStoreProvider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Counter />} />
-          <Route path="/doclist" element={<DocumentList />} />
-        </Routes>
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </ReduxStoreProvider>
   )
 }

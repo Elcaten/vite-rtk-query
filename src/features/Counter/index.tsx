@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
 
 import { useAppSelector, useAppDispatch } from '../../hooks/redux'
 import type { RootState } from '../../store'
@@ -7,6 +6,7 @@ import type { RootState } from '../../store'
 import { decrement, increment } from './counterSlice'
 import styles from './index.module.css'
 import logo from './logo.svg'
+import { Link } from '@tanstack/react-router'
 
 const Counter: React.FC = () => {
   const count = useAppSelector((state: RootState) => state.counter.value)

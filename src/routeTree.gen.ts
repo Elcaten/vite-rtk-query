@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LeaguelistImport } from './routes/leaguelist'
 import { Route as DoclistImport } from './routes/doclist'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const LeaguelistRoute = LeaguelistImport.update({
+  id: '/leaguelist',
+  path: '/leaguelist',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const DoclistRoute = DoclistImport.update({
   id: '/doclist',
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DoclistImport
       parentRoute: typeof rootRoute
     }
+    '/leaguelist': {
+      id: '/leaguelist'
+      path: '/leaguelist'
+      fullPath: '/leaguelist'
+      preLoaderRoute: typeof LeaguelistImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +68,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
+  '/leaguelist': typeof LeaguelistRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
+  '/leaguelist': typeof LeaguelistRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
+  '/leaguelist': typeof LeaguelistRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/doclist'
+  fullPaths: '/' | '/doclist' | '/leaguelist'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/doclist'
-  id: '__root__' | '/' | '/doclist'
+  to: '/' | '/doclist' | '/leaguelist'
+  id: '__root__' | '/' | '/doclist' | '/leaguelist'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DoclistRoute: typeof DoclistRoute
+  LeaguelistRoute: typeof LeaguelistRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DoclistRoute: DoclistRoute,
+  LeaguelistRoute: LeaguelistRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +116,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/doclist"
+        "/doclist",
+        "/leaguelist"
       ]
     },
     "/": {
@@ -105,6 +125,9 @@ export const routeTree = rootRoute
     },
     "/doclist": {
       "filePath": "doclist.tsx"
+    },
+    "/leaguelist": {
+      "filePath": "leaguelist.tsx"
     }
   }
 }

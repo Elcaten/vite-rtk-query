@@ -4,14 +4,16 @@ import { combineReducers } from 'redux'
 
 import counterReducer from './features/Counter/counterSlice'
 import { docsApi } from './services/docs'
+import { volleyApi } from './services/volleyApi'
 
 export const store = configureStore({
   devTools: process.env.NODE_ENV === 'development',
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([docsApi.middleware]),
+    getDefaultMiddleware().concat([docsApi.middleware, volleyApi.middleware]),
   reducer: combineReducers({
     counter: counterReducer,
     [docsApi.reducerPath]: docsApi.reducer,
+    [volleyApi.reducerPath]: volleyApi.reducer,
   }),
 })
 

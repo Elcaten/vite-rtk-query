@@ -14,7 +14,6 @@ export const handlers = [
       },
       { name: 'Vitest', url: 'https://vitest.dev/' },
       { name: 'MSW', url: 'https://mswjs.io/' },
-      { name: 'Tailwind CSS', url: 'https://tailwindcss.com/' },
       {
         name: 'CSS Nesting',
         url: 'https://developer.chrome.com/articles/css-nesting/',

@@ -40,7 +40,6 @@ test('working with msw', async () => {
     () => {
       expect(screen.getByText('Redux Toolkit')).toBeInTheDocument()
       expect(screen.getByText('MSW')).toBeInTheDocument()
-      expect(screen.getByText('Tailwind CSS')).toBeInTheDocument()
     },
     { timeout: 4000 },
   )

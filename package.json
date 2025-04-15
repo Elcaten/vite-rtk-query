@@ -21,7 +21,8 @@
     "prettier": "prettier --ignore-unknown --write .",
     "clean": "rimraf node_modules pnpm-lock.yaml dist",
     "validate": "./scripts/validate",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate:api": "npx @rtk-query/codegen-openapi generate-api.cjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "2.6.1",
@@ -35,6 +36,7 @@
     "redux": "5.0.1"
   },
   "devDependencies": {
+    "@rtk-query/codegen-openapi": "^2.0.0",
     "@tanstack/router-plugin": "^1.116.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

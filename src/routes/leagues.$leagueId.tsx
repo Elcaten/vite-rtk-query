@@ -21,13 +21,31 @@ function RouteComponent() {
     return 'Error'
   }
 
+  const league = data?.response[0]
+
+  if (!league) {
+    return <div>League not found</div>
+  }
+
   return (
     <div>
       <Link to="/leagues">Back</Link>
-      <div>Hello {leagueId}!</div>
-      <div>
-        <JsonView src={data?.response[0] ?? {}} />
-      </div>
+      <div>{league.name}</div>
+      <label>Seasons</label>
+      <ul>
+        {league.seasons
+          .toSorted((a, b) => a.season - b.season)
+          .map((season) => (
+            <li key={season.season}>
+              <Link
+                to="/standings"
+                search={{ leagueId: league.id, season: season.season }}
+              >
+                {season.season}
+              </Link>
+            </li>
+          ))}
+      </ul>
     </div>
   )
 }

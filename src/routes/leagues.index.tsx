@@ -20,16 +20,17 @@ function RouteComponent() {
   }
 
   return (
-    <div>
+    <ul>
       {data?.response.map((league) => (
-        <Link
-          key={league.id}
-          to={`/leagues/$leagueId`}
-          params={{ leagueId: league.id.toString() }}
-        >
-          {league.name}
-        </Link>
+        <li key={league.id}>
+          <Link
+            to={`/leagues/$leagueId`}
+            params={{ leagueId: league.id.toString() }}
+          >
+            {league.name}
+          </Link>
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }

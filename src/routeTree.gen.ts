@@ -11,12 +11,19 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as StandingsImport } from './routes/standings'
 import { Route as DoclistImport } from './routes/doclist'
 import { Route as IndexImport } from './routes/index'
 import { Route as LeaguesIndexImport } from './routes/leagues.index'
 import { Route as LeaguesLeagueIdImport } from './routes/leagues.$leagueId'
 
 // Create/Update Routes
+
+const StandingsRoute = StandingsImport.update({
+  id: '/standings',
+  path: '/standings',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const DoclistRoute = DoclistImport.update({
   id: '/doclist',
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DoclistImport
       parentRoute: typeof rootRoute
     }
+    '/standings': {
+      id: '/standings'
+      path: '/standings'
+      fullPath: '/standings'
+      preLoaderRoute: typeof StandingsImport
+      parentRoute: typeof rootRoute
+    }
     '/leagues/$leagueId': {
       id: '/leagues/$leagueId'
       path: '/leagues/$leagueId'
@@ -82,6 +96,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
+  '/standings': typeof StandingsRoute
   '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
   '/leagues': typeof LeaguesIndexRoute
 }
@@ -89,6 +104,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
+  '/standings': typeof StandingsRoute
   '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
   '/leagues': typeof LeaguesIndexRoute
 }
@@ -97,22 +113,30 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/doclist': typeof DoclistRoute
+  '/standings': typeof StandingsRoute
   '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
   '/leagues/': typeof LeaguesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/doclist' | '/leagues/$leagueId' | '/leagues'
+  fullPaths: '/' | '/doclist' | '/standings' | '/leagues/$leagueId' | '/leagues'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/doclist' | '/leagues/$leagueId' | '/leagues'
-  id: '__root__' | '/' | '/doclist' | '/leagues/$leagueId' | '/leagues/'
+  to: '/' | '/doclist' | '/standings' | '/leagues/$leagueId' | '/leagues'
+  id:
+    | '__root__'
+    | '/'
+    | '/doclist'
+    | '/standings'
+    | '/leagues/$leagueId'
+    | '/leagues/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DoclistRoute: typeof DoclistRoute
+  StandingsRoute: typeof StandingsRoute
   LeaguesLeagueIdRoute: typeof LeaguesLeagueIdRoute
   LeaguesIndexRoute: typeof LeaguesIndexRoute
 }
@@ -120,6 +144,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DoclistRoute: DoclistRoute,
+  StandingsRoute: StandingsRoute,
   LeaguesLeagueIdRoute: LeaguesLeagueIdRoute,
   LeaguesIndexRoute: LeaguesIndexRoute,
 }
@@ -136,6 +161,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/doclist",
+        "/standings",
         "/leagues/$leagueId",
         "/leagues/"
       ]
@@ -145,6 +171,9 @@ export const routeTree = rootRoute
     },
     "/doclist": {
       "filePath": "doclist.tsx"
+    },
+    "/standings": {
+      "filePath": "standings.tsx"
     },
     "/leagues/$leagueId": {
       "filePath": "leagues.$leagueId.tsx"

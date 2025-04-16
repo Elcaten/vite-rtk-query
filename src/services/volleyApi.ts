@@ -266,36 +266,7 @@ export type GetCountriesApiArg = {
   /** Your RapidAPI Key */
   'x-rapidapi-key': string
 }
-export type GetLeaguesApiResponse = {
-  get: string
-  parameters: any[]
-  errors: any[]
-  results: number
-  response: GetLeaguesApiResponseResponse[]
-}
-
-export interface GetLeaguesApiResponseResponse {
-  id: number
-  name: string
-  type: string
-  logo: string
-  country: GetLeaguesApiResponseResponseCountry
-  seasons: GetLeaguesApiResponseResponseSeason[]
-}
-
-export interface GetLeaguesApiResponseResponseCountry {
-  id: number
-  name: string
-  code?: string
-  flag?: string
-}
-
-export interface GetLeaguesApiResponseResponseSeason {
-  season: number
-  current: boolean
-  start: string
-  end: string
-}
+export interface GetLeaguesApiResponse {}
 
 export type GetLeaguesApiArg = {
   /** The id of the league */
@@ -345,7 +316,7 @@ export type GetTeamsStatisticsApiArg = {
   /** Your RapidAPI Key */
   'x-rapidapi-key': string
 }
-export type GetStandingsApiResponse = /** status 200 OK */ {}
+export interface GetStandingsApiResponse /** status 200 OK */ {}
 export type GetStandingsApiArg = {
   /** The id of the league */
   league: number

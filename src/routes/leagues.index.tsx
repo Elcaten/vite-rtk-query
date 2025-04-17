@@ -1,25 +1,43 @@
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
-import { useGetLeaguesQuery } from '../services/volleyApi'
-import { useState } from 'react'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useDebounce } from '@uidotdev/usehooks'
+import { useEffect, useState } from 'react'
+import { volleyApi } from '../services/volleyApi'
+import { store } from '../store'
+
+type LeaguesSearch = {
+  filter: string
+}
 
 export const Route = createFileRoute('/leagues/')({
   component: RouteComponent,
+  validateSearch: (search: Record<string, unknown>): LeaguesSearch => {
+    const filter = (search?.filter as string) ?? ''
+
+    return {
+      filter,
+    }
+  },
+  loaderDeps: ({ search: { filter } }) => ({ filter }),
+  loader: ({ deps: { filter } }) =>
+    store.dispatch(
+      volleyApi.endpoints.getLeagues.initiate({
+        'x-rapidapi-key': import.meta.env.VITE_VOLLEY_API_X_RAPID_API_KEY,
+        search: filter,
+      }),
+    ),
 })
 
-const MIN_SEARCH_LENGTH = 3
-
 function RouteComponent() {
-  const [searchTerm, setSearchTerm] = useState('')
+  const leagues = Route.useLoaderData()
+  const routeSearch = Route.useSearch()
+
+  const navigate = useNavigate({ from: Route.fullPath })
+  const [searchTerm, setSearchTerm] = useState(routeSearch.filter)
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
-  const { isFetching, isError, isSuccess, data } = useGetLeaguesQuery(
-    {
-      'x-rapidapi-key': import.meta.env.VITE_VOLLEY_API_X_RAPID_API_KEY,
-      search: debouncedSearchTerm,
-    },
-    { skip: debouncedSearchTerm.length < MIN_SEARCH_LENGTH },
-  )
+  useEffect(() => {
+    navigate({ to: '/leagues', search: { filter: debouncedSearchTerm } })
+  }, [debouncedSearchTerm])
 
   return (
     <div>
@@ -28,22 +46,18 @@ function RouteComponent() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       ></input>
-      {isError && <div>Error</div>}
-      {isFetching && <div>Loading...</div>}
-      {isSuccess && (
-        <ul>
-          {data?.response.map((league) => (
-            <li key={league.id}>
-              <Link
-                to={`/leagues/$leagueId`}
-                params={{ leagueId: league.id.toString() }}
-              >
-                {league.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul>
+        {leagues?.data?.response.map((league) => (
+          <li key={league.id}>
+            <Link
+              to={`/leagues/$leagueId`}
+              params={{ leagueId: league.id.toString() }}
+            >
+              {league.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

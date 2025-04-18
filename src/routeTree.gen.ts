@@ -15,6 +15,7 @@ import { Route as SplatImport } from './routes/$'
 import { Route as AuthRouteImport } from './routes/_auth/route'
 import { Route as GuestIndexImport } from './routes/guest/index'
 import { Route as AuthStandingsImport } from './routes/_auth/standings'
+import { Route as AuthProfileImport } from './routes/_auth/profile'
 import { Route as AuthDashboardImport } from './routes/_auth/dashboard'
 import { Route as AuthTeamsIndexImport } from './routes/_auth/teams.index'
 import { Route as AuthLeaguesIndexImport } from './routes/_auth/leagues.index'
@@ -43,6 +44,12 @@ const GuestIndexRoute = GuestIndexImport.update({
 const AuthStandingsRoute = AuthStandingsImport.update({
   id: '/standings',
   path: '/standings',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AuthProfileRoute = AuthProfileImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
@@ -101,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardImport
       parentRoute: typeof AuthRouteImport
     }
+    '/_auth/profile': {
+      id: '/_auth/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthProfileImport
+      parentRoute: typeof AuthRouteImport
+    }
     '/_auth/standings': {
       id: '/_auth/standings'
       path: '/standings'
@@ -150,6 +164,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteRouteChildren {
   AuthDashboardRoute: typeof AuthDashboardRoute
+  AuthProfileRoute: typeof AuthProfileRoute
   AuthStandingsRoute: typeof AuthStandingsRoute
   AuthLeaguesLeagueIdRoute: typeof AuthLeaguesLeagueIdRoute
   AuthTeamsTeamIdRoute: typeof AuthTeamsTeamIdRoute
@@ -159,6 +174,7 @@ interface AuthRouteRouteChildren {
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthDashboardRoute: AuthDashboardRoute,
+  AuthProfileRoute: AuthProfileRoute,
   AuthStandingsRoute: AuthStandingsRoute,
   AuthLeaguesLeagueIdRoute: AuthLeaguesLeagueIdRoute,
   AuthTeamsTeamIdRoute: AuthTeamsTeamIdRoute,
@@ -174,6 +190,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/dashboard': typeof AuthDashboardRoute
+  '/profile': typeof AuthProfileRoute
   '/standings': typeof AuthStandingsRoute
   '/guest': typeof GuestIndexRoute
   '/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
@@ -186,6 +203,7 @@ export interface FileRoutesByTo {
   '': typeof AuthRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/dashboard': typeof AuthDashboardRoute
+  '/profile': typeof AuthProfileRoute
   '/standings': typeof AuthStandingsRoute
   '/guest': typeof GuestIndexRoute
   '/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
@@ -199,6 +217,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/$': typeof SplatRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
+  '/_auth/profile': typeof AuthProfileRoute
   '/_auth/standings': typeof AuthStandingsRoute
   '/guest/': typeof GuestIndexRoute
   '/_auth/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
@@ -213,6 +232,7 @@ export interface FileRouteTypes {
     | ''
     | '/$'
     | '/dashboard'
+    | '/profile'
     | '/standings'
     | '/guest'
     | '/leagues/$leagueId'
@@ -224,6 +244,7 @@ export interface FileRouteTypes {
     | ''
     | '/$'
     | '/dashboard'
+    | '/profile'
     | '/standings'
     | '/guest'
     | '/leagues/$leagueId'
@@ -235,6 +256,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/$'
     | '/_auth/dashboard'
+    | '/_auth/profile'
     | '/_auth/standings'
     | '/guest/'
     | '/_auth/leagues/$leagueId'
@@ -275,6 +297,7 @@ export const routeTree = rootRoute
       "filePath": "_auth/route.tsx",
       "children": [
         "/_auth/dashboard",
+        "/_auth/profile",
         "/_auth/standings",
         "/_auth/leagues/$leagueId",
         "/_auth/teams/$teamId",
@@ -287,6 +310,10 @@ export const routeTree = rootRoute
     },
     "/_auth/dashboard": {
       "filePath": "_auth/dashboard.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/profile": {
+      "filePath": "_auth/profile.tsx",
       "parent": "/_auth"
     },
     "/_auth/standings": {

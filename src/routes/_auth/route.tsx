@@ -44,7 +44,9 @@ function RouteComponent() {
           <span
             style={{ height: '60px', overflow: 'hidden', borderRadius: '4px' }}
           >
-            <ProfilePicture />
+            <Link to="/profile">
+              <ProfilePicture />
+            </Link>
           </span>
           <LogoutButton />
         </div>

@@ -1,9 +1,30 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { volleyApi } from '../../services/volleyApi'
+import { loadQuery } from '../../utils/loadQuery'
 
 export const Route = createFileRoute('/_auth/teams/$teamId')({
+  loader: async ({ params }) => {
+    const queryData = await loadQuery(volleyApi.endpoints.getTeams, {
+      id: Number(params.teamId),
+    })
+    const league = queryData.data?.response?.[0]
+    if (!league) {
+      throw Error(`League with id ${params.teamId} not found`)
+    }
+    return league
+  },
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/teams/{Route.useParams().teamId}</div>
+  const team = Route.useLoaderData()
+
+  return (
+    <div>
+      <div>
+        <img src={team.logo}></img>
+        <div>{team.name}</div>
+      </div>
+    </div>
+  )
 }

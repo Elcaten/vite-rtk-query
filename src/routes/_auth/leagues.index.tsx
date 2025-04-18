@@ -35,6 +35,7 @@ function RouteComponent() {
       <label>Find league: </label>
       <input
         value={searchTerm}
+        placeholder="Superlega"
         onChange={(e) => setSearchTerm(e.target.value)}
       ></input>
       <ul>

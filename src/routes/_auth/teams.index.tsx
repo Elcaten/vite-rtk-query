@@ -35,6 +35,7 @@ function RouteComponent() {
       <label>Find team:</label>
       <input
         value={searchTerm}
+        placeholder="Trentino"
         onChange={(e) => setSearchTerm(e.target.value)}
       ></input>
       <ul>

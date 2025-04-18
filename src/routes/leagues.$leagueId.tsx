@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useGetLeaguesQuery } from '../services/volleyApi'
-import JsonView from 'react18-json-view'
 
 export const Route = createFileRoute('/leagues/$leagueId')({
   component: RouteComponent,
@@ -9,7 +8,6 @@ export const Route = createFileRoute('/leagues/$leagueId')({
 function RouteComponent() {
   const { leagueId } = Route.useParams()
   const { isError, isLoading, data } = useGetLeaguesQuery({
-    'x-rapidapi-key': import.meta.env.VITE_VOLLEY_API_X_RAPID_API_KEY,
     id: Number.parseInt(leagueId),
   })
 
@@ -29,7 +27,9 @@ function RouteComponent() {
 
   return (
     <div>
-      <Link to="/leagues">Back</Link>
+      <Link to="/leagues" search={{ filter: '' }}>
+        Back
+      </Link>
       <div>{league.name}</div>
       <label>Seasons</label>
       <ul>

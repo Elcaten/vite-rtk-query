@@ -9,6 +9,7 @@ export const volleyApiBase = createApi({
     baseUrl: import.meta.env.VITE_VOLLEY_API_BASE_URL,
     headers: {
       'x-rapidapi-host': import.meta.env.VITE_VOLLEY_API_X_RAPID_API_HOST,
+      'x-rapidapi-key': import.meta.env.VITE_VOLLEY_API_X_RAPID_API_KEY,
     },
   }),
   endpoints: () => ({}),

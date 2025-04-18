@@ -4,25 +4,17 @@ const injectedRtkApi = api.injectEndpoints({
     getTimezone: build.query<GetTimezoneApiResponse, GetTimezoneApiArg>({
       query: (queryArg) => ({
         url: `/timezone`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
       }),
     }),
     getSeasons: build.query<GetSeasonsApiResponse, GetSeasonsApiArg>({
       query: (queryArg) => ({
         url: `/seasons`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
       }),
     }),
     getCountries: build.query<GetCountriesApiResponse, GetCountriesApiArg>({
       query: (queryArg) => ({
         url: `/countries`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           id: queryArg.id,
           name: queryArg.name,
@@ -34,9 +26,7 @@ const injectedRtkApi = api.injectEndpoints({
     getLeagues: build.query<GetLeaguesApiResponse, GetLeaguesApiArg>({
       query: (queryArg) => ({
         url: `/leagues`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           id: queryArg.id,
           name: queryArg.name,
@@ -51,9 +41,7 @@ const injectedRtkApi = api.injectEndpoints({
     getTeams: build.query<GetTeamsApiResponse, GetTeamsApiArg>({
       query: (queryArg) => ({
         url: `/teams`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           id: queryArg.id,
           name: queryArg.name,
@@ -71,9 +59,7 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/teams/statistics`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           league: queryArg.league,
           season: queryArg.season,
@@ -85,9 +71,7 @@ const injectedRtkApi = api.injectEndpoints({
     getStandings: build.query<GetStandingsApiResponse, GetStandingsApiArg>({
       query: (queryArg) => ({
         url: `/standings`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           league: queryArg.league,
           season: queryArg.season,
@@ -103,9 +87,7 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/standings/stages`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           league: queryArg.league,
           season: queryArg.season,
@@ -118,9 +100,7 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/standings/groups`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           league: queryArg.league,
           season: queryArg.season,
@@ -130,9 +110,7 @@ const injectedRtkApi = api.injectEndpoints({
     getGames: build.query<GetGamesApiResponse, GetGamesApiArg>({
       query: (queryArg) => ({
         url: `/games`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           id: queryArg.id,
           date: queryArg.date,
@@ -146,9 +124,7 @@ const injectedRtkApi = api.injectEndpoints({
     getGamesH2H: build.query<GetGamesH2HApiResponse, GetGamesH2HApiArg>({
       query: (queryArg) => ({
         url: `/games/h2h`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           h2h: queryArg.h2H,
           date: queryArg.date,
@@ -161,9 +137,7 @@ const injectedRtkApi = api.injectEndpoints({
     getOdds: build.query<GetOddsApiResponse, GetOddsApiArg>({
       query: (queryArg) => ({
         url: `/odds`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           league: queryArg.league,
           season: queryArg.season,
@@ -176,9 +150,7 @@ const injectedRtkApi = api.injectEndpoints({
     getOddsBets: build.query<GetOddsBetsApiResponse, GetOddsBetsApiArg>({
       query: (queryArg) => ({
         url: `/odds/bets`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           id: queryArg.id,
           search: queryArg.search,
@@ -191,9 +163,7 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/odds/bookmakers`,
-        headers: {
-          'x-rapidapi-key': queryArg['x-rapidapi-key'],
-        },
+
         params: {
           id: queryArg.id,
           search: queryArg.search,
@@ -245,15 +215,9 @@ const injectedRtkApi = api.injectEndpoints({
 })
 export { injectedRtkApi as volleyApi }
 export type GetTimezoneApiResponse = /** status 200 OK */ {}
-export type GetTimezoneApiArg = {
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
-}
+export type GetTimezoneApiArg = {}
 export type GetSeasonsApiResponse = /** status 200 OK */ object
-export type GetSeasonsApiArg = {
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
-}
+export type GetSeasonsApiArg = {}
 export type GetCountriesApiResponse = /** status 200 OK */ {}
 export type GetCountriesApiArg = {
   /** The id of the country */
@@ -263,8 +227,6 @@ export type GetCountriesApiArg = {
   /** The code of the country */
   code?: string
   search?: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export interface GetLeaguesApiResponse {}
 
@@ -282,8 +244,6 @@ export type GetLeaguesApiArg = {
   /** The season of the league */
   season?: number
   search?: string
-  /** You rapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetTeamsApiResponse = /** status 200 OK */ {}
 export type GetTeamsApiArg = {
@@ -300,8 +260,6 @@ export type GetTeamsApiArg = {
   /** The season of the league */
   season?: number
   search?: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetTeamsStatisticsApiResponse = /** status 200 OK */ {}
 export type GetTeamsStatisticsApiArg = {
@@ -313,8 +271,6 @@ export type GetTeamsStatisticsApiArg = {
   team: number
   /** A date limit */
   date?: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export interface GetStandingsApiResponse /** status 200 OK */ {}
 export type GetStandingsApiArg = {
@@ -328,8 +284,6 @@ export type GetStandingsApiArg = {
   stage?: string
   /** A valid group */
   group?: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetStandingsStagesApiResponse = /** status 200 OK */ {}
 export type GetStandingsStagesApiArg = {
@@ -337,8 +291,6 @@ export type GetStandingsStagesApiArg = {
   league: number
   /** The season of the league */
   season: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetStandingsGroupsApiResponse = /** status 200 OK */ {}
 export type GetStandingsGroupsApiArg = {
@@ -346,8 +298,6 @@ export type GetStandingsGroupsApiArg = {
   league: number
   /** The season of the league */
   season: number
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetGamesApiResponse = /** status 200 OK */ {}
 export type GetGamesApiArg = {
@@ -363,8 +313,6 @@ export type GetGamesApiArg = {
   team?: number
   /** A valid timezone */
   timezone?: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetGamesH2HApiResponse = /** status 200 OK */ {}
 export type GetGamesH2HApiArg = {
@@ -378,8 +326,6 @@ export type GetGamesH2HApiArg = {
   season?: number
   /** A valid timezone */
   timezone?: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetOddsApiResponse = /** status 200 OK */ {}
 export type GetOddsApiArg = {
@@ -393,8 +339,6 @@ export type GetOddsApiArg = {
   bookmaker?: number
   /** The id of the bet */
   bet?: number
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetOddsBetsApiResponse = /** status 200 OK */ {}
 export type GetOddsBetsApiArg = {
@@ -402,8 +346,6 @@ export type GetOddsBetsApiArg = {
   id?: number
   /** The name of the bet */
   search?: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetOddsBookmakersApiResponse = /** status 200 OK */ {}
 export type GetOddsBookmakersApiArg = {
@@ -411,8 +353,6 @@ export type GetOddsBookmakersApiArg = {
   id?: number
   /** The name of the bookmaker */
   search?: string
-  /** Your RapidAPI Key */
-  'x-rapidapi-key': string
 }
 export type GetWidgetsGamesApiResponse = unknown
 export type GetWidgetsGamesApiArg = {

@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 import { Headers, Request } from 'node-fetch'
 
+import { afterAll, afterEach, beforeAll } from 'vitest'
 import { server } from '../mocks/server'
 
 // @ts-ignore

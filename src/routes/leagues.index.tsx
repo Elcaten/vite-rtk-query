@@ -31,7 +31,7 @@ function RouteComponent() {
   }, [debouncedSearchTerm])
 
   return (
-    <div>
+    <main>
       <label>Search: </label>
       <input
         value={searchTerm}
@@ -49,6 +49,6 @@ function RouteComponent() {
           </li>
         ))}
       </ul>
-    </div>
+    </main>
   )
 }

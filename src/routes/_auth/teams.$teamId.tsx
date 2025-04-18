@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { volleyApi } from '../../services/volleyApi'
 import { loadQuery } from '../../utils/loadQuery'
 
@@ -21,6 +21,7 @@ function RouteComponent() {
 
   return (
     <div>
+      <Link to="/teams">Back</Link>
       <div>
         <img src={team.logo}></img>
         <div>{team.name}</div>

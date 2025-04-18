@@ -32,7 +32,7 @@ function RouteComponent() {
 
   return (
     <main>
-      <label>Search: </label>
+      <label>Find league: </label>
       <input
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}

@@ -64,26 +64,34 @@ function RouteComponent() {
       </Link>
       <img src={standings[0].league.logo} style={{ display: 'block' }} />
       <table>
-        <tr>
-          <th></th>
-          <th>Team</th>
-          <th>W</th>
-          <th>L</th>
-          <th>Pts</th>
-        </tr>
-
-        {standings.map((standing) => (
-          <tr key={standing.league.id}>
-            <td>{standing.position}</td>
-            <td>
-              <img src={standing.team.logo} style={{ height: '32px' }} />{' '}
-              {standing.team.name}
-            </td>
-            <td>{standing.games.win.total}</td>
-            <td>{standing.games.lose.total}</td>
-            <td>{standing.games.played}</td>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Team</th>
+            <th>W</th>
+            <th>L</th>
+            <th>Pts</th>
           </tr>
-        ))}
+        </thead>
+        <tbody>
+          {standings.map((standing) => (
+            <tr key={standing.league.id}>
+              <td>{standing.position}</td>
+              <td>
+                <img src={standing.team.logo} style={{ height: '32px' }} />{' '}
+                <Link
+                  to={`/teams/$teamId`}
+                  params={{ teamId: standing.team.id.toString() }}
+                >
+                  {standing.team.name}
+                </Link>
+              </td>
+              <td>{standing.games.win.total}</td>
+              <td>{standing.games.lose.total}</td>
+              <td>{standing.games.played}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   )

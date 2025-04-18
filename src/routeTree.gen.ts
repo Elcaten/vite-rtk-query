@@ -13,7 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as StandingsImport } from './routes/standings'
 import { Route as IndexImport } from './routes/index'
+import { Route as TeamsIndexImport } from './routes/teams.index'
 import { Route as LeaguesIndexImport } from './routes/leagues.index'
+import { Route as TeamsTeamIdImport } from './routes/teams.$teamId'
 import { Route as LeaguesLeagueIdImport } from './routes/leagues.$leagueId'
 
 // Create/Update Routes
@@ -30,9 +32,21 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TeamsIndexRoute = TeamsIndexImport.update({
+  id: '/teams/',
+  path: '/teams/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LeaguesIndexRoute = LeaguesIndexImport.update({
   id: '/leagues/',
   path: '/leagues/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TeamsTeamIdRoute = TeamsTeamIdImport.update({
+  id: '/teams/$teamId',
+  path: '/teams/$teamId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,11 +81,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeaguesLeagueIdImport
       parentRoute: typeof rootRoute
     }
+    '/teams/$teamId': {
+      id: '/teams/$teamId'
+      path: '/teams/$teamId'
+      fullPath: '/teams/$teamId'
+      preLoaderRoute: typeof TeamsTeamIdImport
+      parentRoute: typeof rootRoute
+    }
     '/leagues/': {
       id: '/leagues/'
       path: '/leagues'
       fullPath: '/leagues'
       preLoaderRoute: typeof LeaguesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/teams/': {
+      id: '/teams/'
+      path: '/teams'
+      fullPath: '/teams'
+      preLoaderRoute: typeof TeamsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -83,14 +111,18 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/standings': typeof StandingsRoute
   '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
+  '/teams/$teamId': typeof TeamsTeamIdRoute
   '/leagues': typeof LeaguesIndexRoute
+  '/teams': typeof TeamsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/standings': typeof StandingsRoute
   '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
+  '/teams/$teamId': typeof TeamsTeamIdRoute
   '/leagues': typeof LeaguesIndexRoute
+  '/teams': typeof TeamsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -98,15 +130,36 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/standings': typeof StandingsRoute
   '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
+  '/teams/$teamId': typeof TeamsTeamIdRoute
   '/leagues/': typeof LeaguesIndexRoute
+  '/teams/': typeof TeamsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/standings' | '/leagues/$leagueId' | '/leagues'
+  fullPaths:
+    | '/'
+    | '/standings'
+    | '/leagues/$leagueId'
+    | '/teams/$teamId'
+    | '/leagues'
+    | '/teams'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/standings' | '/leagues/$leagueId' | '/leagues'
-  id: '__root__' | '/' | '/standings' | '/leagues/$leagueId' | '/leagues/'
+  to:
+    | '/'
+    | '/standings'
+    | '/leagues/$leagueId'
+    | '/teams/$teamId'
+    | '/leagues'
+    | '/teams'
+  id:
+    | '__root__'
+    | '/'
+    | '/standings'
+    | '/leagues/$leagueId'
+    | '/teams/$teamId'
+    | '/leagues/'
+    | '/teams/'
   fileRoutesById: FileRoutesById
 }
 
@@ -114,14 +167,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StandingsRoute: typeof StandingsRoute
   LeaguesLeagueIdRoute: typeof LeaguesLeagueIdRoute
+  TeamsTeamIdRoute: typeof TeamsTeamIdRoute
   LeaguesIndexRoute: typeof LeaguesIndexRoute
+  TeamsIndexRoute: typeof TeamsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StandingsRoute: StandingsRoute,
   LeaguesLeagueIdRoute: LeaguesLeagueIdRoute,
+  TeamsTeamIdRoute: TeamsTeamIdRoute,
   LeaguesIndexRoute: LeaguesIndexRoute,
+  TeamsIndexRoute: TeamsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -137,7 +194,9 @@ export const routeTree = rootRoute
         "/",
         "/standings",
         "/leagues/$leagueId",
-        "/leagues/"
+        "/teams/$teamId",
+        "/leagues/",
+        "/teams/"
       ]
     },
     "/": {
@@ -149,8 +208,14 @@ export const routeTree = rootRoute
     "/leagues/$leagueId": {
       "filePath": "leagues.$leagueId.tsx"
     },
+    "/teams/$teamId": {
+      "filePath": "teams.$teamId.tsx"
+    },
     "/leagues/": {
       "filePath": "leagues.index.tsx"
+    },
+    "/teams/": {
+      "filePath": "teams.index.tsx"
     }
   }
 }

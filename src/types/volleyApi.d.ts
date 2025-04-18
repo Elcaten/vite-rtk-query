@@ -1,4 +1,4 @@
-import { GetStandingsApiResponse as OriginalGetStandingsApiResponse } from '../services/volleyApi'
+import '../services/volleyApi'
 
 declare module '../services/volleyApi' {
   export interface GetLeaguesApiResponseResponse {
@@ -84,5 +84,26 @@ declare module '../services/volleyApi' {
         description: any
       }>
     >
+  }
+
+  export interface GetTeamsApiResponse {
+    get: string
+    parameters: {
+      search: string
+    }
+    errors: Array<any>
+    results: number
+    response: Array<{
+      id: number
+      name: string
+      logo: string
+      national: boolean
+      country: {
+        id: number
+        name: string
+        code: string
+        flag: string
+      }
+    }>
   }
 }

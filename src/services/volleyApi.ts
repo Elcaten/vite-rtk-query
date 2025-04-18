@@ -245,7 +245,7 @@ export type GetLeaguesApiArg = {
   season?: number
   search?: string
 }
-export type GetTeamsApiResponse = /** status 200 OK */ {}
+export interface GetTeamsApiResponse /** status 200 OK */ {}
 export type GetTeamsApiArg = {
   /** The id of the team */
   id?: number

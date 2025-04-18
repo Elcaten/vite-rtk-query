@@ -25,6 +25,7 @@
     "generate:api": "npx @rtk-query/codegen-openapi generate-api.cjs"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.3.0",
     "@reduxjs/toolkit": "2.6.1",
     "@tanstack/react-router": "^1.116.0",
     "@tanstack/react-router-devtools": "^1.116.0",

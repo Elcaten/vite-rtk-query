@@ -1,13 +1,10 @@
+import { Auth0Provider } from '@auth0/auth0-react'
+import { createRouter, RouterProvider } from '@tanstack/react-router'
 import React from 'react'
 import { Provider as ReduxStoreProvider } from 'react-redux'
-import './features/Counter/index.module.css'
+import { routeTree } from './routeTree.gen'
 import { store } from './store'
 
-// Import the generated route tree
-import { routeTree } from './routeTree.gen'
-import { createRouter, RouterProvider } from '@tanstack/react-router'
-
-// Create a new router instance
 const router = createRouter({ routeTree })
 
 // Register the router instance for type safety
@@ -19,9 +16,17 @@ declare module '@tanstack/react-router' {
 
 const App: React.FC = () => {
   return (
-    <ReduxStoreProvider store={store}>
-      <RouterProvider router={router} />
-    </ReduxStoreProvider>
+    <Auth0Provider
+      domain={import.meta.env.VITE_AUTH_0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH_0_CLIENT_ID}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+      }}
+    >
+      <ReduxStoreProvider store={store}>
+        <RouterProvider router={router} />
+      </ReduxStoreProvider>
+    </Auth0Provider>
   )
 }
 

@@ -17,7 +17,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": ["vitest/globals", "@testing-library/jest-dom"],
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "typeRoots": ["./node_modules/@types", "./@types"]
   },
   "include": [
     "vite.config.ts",
@@ -25,7 +25,6 @@
     "postcss.config.js",
     ".eslintrc.cjs",
     "./src",
-    "./@types",
-    "./src/types"
+    "./@types"
   ]
 }

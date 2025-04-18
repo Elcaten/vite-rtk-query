@@ -1,4 +1,7 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
+import LoginButton from '../features/session/login/login.ui'
+import LogoutButton from '../features/session/logout/logout.ui'
+import Profile from '../features/session/Profile'
 
 export const Route = createRootRoute({
   component: () => (
@@ -14,8 +17,14 @@ export const Route = createRootRoute({
           <li>
             <Link to="/teams">Teams</Link>
           </li>
+          <li>
+            <LoginButton />
+            <LogoutButton />
+          </li>
         </ul>
       </nav>
+
+      <Profile />
 
       <Outlet />
       {/* <TanStackRouterDevtools /> */}

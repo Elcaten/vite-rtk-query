@@ -1,34 +1,29 @@
-import '../services/volleyApi'
+import '../src/services/volleyApi'
 
-declare module '../services/volleyApi' {
-  export interface GetLeaguesApiResponseResponse {
-    id: number
-    name: string
-    type: string
-    logo: string
-    country: GetLeaguesApiResponseResponseCountry
-    seasons: GetLeaguesApiResponseResponseSeason[]
-  }
-
-  export interface GetLeaguesApiResponseResponseCountry {
-    id: number
-    name: string
-    code?: string
-    flag?: string
-  }
-
-  export interface GetLeaguesApiResponseResponseSeason {
-    season: number
-    current: boolean
-    start: string
-    end: string
-  }
+declare module '../src/services/volleyApi' {
   export interface GetLeaguesApiResponse {
     get: string
     parameters: any[]
     errors: any[]
     results: number
-    response: GetLeaguesApiResponseResponse[]
+    response: Array<{
+      id: number
+      name: string
+      type: string
+      logo: string
+      country: {
+        id: number
+        name: string
+        code?: string
+        flag?: string
+      }
+      seasons: Array<{
+        season: number
+        current: boolean
+        start: string
+        end: string
+      }>
+    }>
   }
 
   export interface GetStandingsApiResponse {

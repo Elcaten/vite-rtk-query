@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useGetStandingsQuery } from '../services/volleyApi'
-import JsonView from 'react18-json-view'
 
 type StandingsSearch =
   | {
@@ -35,7 +34,6 @@ function RouteComponent() {
 
   const { isError, isLoading, data } = useGetStandingsQuery(
     {
-      'x-rapidapi-key': import.meta.env.VITE_VOLLEY_API_X_RAPID_API_KEY,
       league: search.leagueId,
       season: search.season,
     },

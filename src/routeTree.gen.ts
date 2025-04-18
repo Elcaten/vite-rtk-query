@@ -11,174 +11,249 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as StandingsImport } from './routes/standings'
-import { Route as IndexImport } from './routes/index'
-import { Route as TeamsIndexImport } from './routes/teams.index'
-import { Route as LeaguesIndexImport } from './routes/leagues.index'
-import { Route as TeamsTeamIdImport } from './routes/teams.$teamId'
-import { Route as LeaguesLeagueIdImport } from './routes/leagues.$leagueId'
+import { Route as SplatImport } from './routes/$'
+import { Route as AuthRouteImport } from './routes/_auth/route'
+import { Route as GuestIndexImport } from './routes/guest/index'
+import { Route as AuthStandingsImport } from './routes/_auth/standings'
+import { Route as AuthDashboardImport } from './routes/_auth/dashboard'
+import { Route as AuthTeamsIndexImport } from './routes/_auth/teams.index'
+import { Route as AuthLeaguesIndexImport } from './routes/_auth/leagues.index'
+import { Route as AuthTeamsTeamIdImport } from './routes/_auth/teams.$teamId'
+import { Route as AuthLeaguesLeagueIdImport } from './routes/_auth/leagues.$leagueId'
 
 // Create/Update Routes
 
-const StandingsRoute = StandingsImport.update({
+const SplatRoute = SplatImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRouteRoute = AuthRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GuestIndexRoute = GuestIndexImport.update({
+  id: '/guest/',
+  path: '/guest/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthStandingsRoute = AuthStandingsImport.update({
   id: '/standings',
   path: '/standings',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRoute,
+const AuthDashboardRoute = AuthDashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const TeamsIndexRoute = TeamsIndexImport.update({
+const AuthTeamsIndexRoute = AuthTeamsIndexImport.update({
   id: '/teams/',
   path: '/teams/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const LeaguesIndexRoute = LeaguesIndexImport.update({
+const AuthLeaguesIndexRoute = AuthLeaguesIndexImport.update({
   id: '/leagues/',
   path: '/leagues/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const TeamsTeamIdRoute = TeamsTeamIdImport.update({
+const AuthTeamsTeamIdRoute = AuthTeamsTeamIdImport.update({
   id: '/teams/$teamId',
   path: '/teams/$teamId',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const LeaguesLeagueIdRoute = LeaguesLeagueIdImport.update({
+const AuthLeaguesLeagueIdRoute = AuthLeaguesLeagueIdImport.update({
   id: '/leagues/$leagueId',
   path: '/leagues/$leagueId',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
-    '/standings': {
-      id: '/standings'
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/dashboard': {
+      id: '/_auth/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthDashboardImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/_auth/standings': {
+      id: '/_auth/standings'
       path: '/standings'
       fullPath: '/standings'
-      preLoaderRoute: typeof StandingsImport
+      preLoaderRoute: typeof AuthStandingsImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/guest/': {
+      id: '/guest/'
+      path: '/guest'
+      fullPath: '/guest'
+      preLoaderRoute: typeof GuestIndexImport
       parentRoute: typeof rootRoute
     }
-    '/leagues/$leagueId': {
-      id: '/leagues/$leagueId'
+    '/_auth/leagues/$leagueId': {
+      id: '/_auth/leagues/$leagueId'
       path: '/leagues/$leagueId'
       fullPath: '/leagues/$leagueId'
-      preLoaderRoute: typeof LeaguesLeagueIdImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthLeaguesLeagueIdImport
+      parentRoute: typeof AuthRouteImport
     }
-    '/teams/$teamId': {
-      id: '/teams/$teamId'
+    '/_auth/teams/$teamId': {
+      id: '/_auth/teams/$teamId'
       path: '/teams/$teamId'
       fullPath: '/teams/$teamId'
-      preLoaderRoute: typeof TeamsTeamIdImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthTeamsTeamIdImport
+      parentRoute: typeof AuthRouteImport
     }
-    '/leagues/': {
-      id: '/leagues/'
+    '/_auth/leagues/': {
+      id: '/_auth/leagues/'
       path: '/leagues'
       fullPath: '/leagues'
-      preLoaderRoute: typeof LeaguesIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthLeaguesIndexImport
+      parentRoute: typeof AuthRouteImport
     }
-    '/teams/': {
-      id: '/teams/'
+    '/_auth/teams/': {
+      id: '/_auth/teams/'
       path: '/teams'
       fullPath: '/teams'
-      preLoaderRoute: typeof TeamsIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthTeamsIndexImport
+      parentRoute: typeof AuthRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthRouteRouteChildren {
+  AuthDashboardRoute: typeof AuthDashboardRoute
+  AuthStandingsRoute: typeof AuthStandingsRoute
+  AuthLeaguesLeagueIdRoute: typeof AuthLeaguesLeagueIdRoute
+  AuthTeamsTeamIdRoute: typeof AuthTeamsTeamIdRoute
+  AuthLeaguesIndexRoute: typeof AuthLeaguesIndexRoute
+  AuthTeamsIndexRoute: typeof AuthTeamsIndexRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthDashboardRoute: AuthDashboardRoute,
+  AuthStandingsRoute: AuthStandingsRoute,
+  AuthLeaguesLeagueIdRoute: AuthLeaguesLeagueIdRoute,
+  AuthTeamsTeamIdRoute: AuthTeamsTeamIdRoute,
+  AuthLeaguesIndexRoute: AuthLeaguesIndexRoute,
+  AuthTeamsIndexRoute: AuthTeamsIndexRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/standings': typeof StandingsRoute
-  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
-  '/teams/$teamId': typeof TeamsTeamIdRoute
-  '/leagues': typeof LeaguesIndexRoute
-  '/teams': typeof TeamsIndexRoute
+  '': typeof AuthRouteRouteWithChildren
+  '/$': typeof SplatRoute
+  '/dashboard': typeof AuthDashboardRoute
+  '/standings': typeof AuthStandingsRoute
+  '/guest': typeof GuestIndexRoute
+  '/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
+  '/teams/$teamId': typeof AuthTeamsTeamIdRoute
+  '/leagues': typeof AuthLeaguesIndexRoute
+  '/teams': typeof AuthTeamsIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/standings': typeof StandingsRoute
-  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
-  '/teams/$teamId': typeof TeamsTeamIdRoute
-  '/leagues': typeof LeaguesIndexRoute
-  '/teams': typeof TeamsIndexRoute
+  '': typeof AuthRouteRouteWithChildren
+  '/$': typeof SplatRoute
+  '/dashboard': typeof AuthDashboardRoute
+  '/standings': typeof AuthStandingsRoute
+  '/guest': typeof GuestIndexRoute
+  '/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
+  '/teams/$teamId': typeof AuthTeamsTeamIdRoute
+  '/leagues': typeof AuthLeaguesIndexRoute
+  '/teams': typeof AuthTeamsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/standings': typeof StandingsRoute
-  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
-  '/teams/$teamId': typeof TeamsTeamIdRoute
-  '/leagues/': typeof LeaguesIndexRoute
-  '/teams/': typeof TeamsIndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/$': typeof SplatRoute
+  '/_auth/dashboard': typeof AuthDashboardRoute
+  '/_auth/standings': typeof AuthStandingsRoute
+  '/guest/': typeof GuestIndexRoute
+  '/_auth/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
+  '/_auth/teams/$teamId': typeof AuthTeamsTeamIdRoute
+  '/_auth/leagues/': typeof AuthLeaguesIndexRoute
+  '/_auth/teams/': typeof AuthTeamsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | ''
+    | '/$'
+    | '/dashboard'
     | '/standings'
+    | '/guest'
     | '/leagues/$leagueId'
     | '/teams/$teamId'
     | '/leagues'
     | '/teams'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | ''
+    | '/$'
+    | '/dashboard'
     | '/standings'
+    | '/guest'
     | '/leagues/$leagueId'
     | '/teams/$teamId'
     | '/leagues'
     | '/teams'
   id:
     | '__root__'
-    | '/'
-    | '/standings'
-    | '/leagues/$leagueId'
-    | '/teams/$teamId'
-    | '/leagues/'
-    | '/teams/'
+    | '/_auth'
+    | '/$'
+    | '/_auth/dashboard'
+    | '/_auth/standings'
+    | '/guest/'
+    | '/_auth/leagues/$leagueId'
+    | '/_auth/teams/$teamId'
+    | '/_auth/leagues/'
+    | '/_auth/teams/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  StandingsRoute: typeof StandingsRoute
-  LeaguesLeagueIdRoute: typeof LeaguesLeagueIdRoute
-  TeamsTeamIdRoute: typeof TeamsTeamIdRoute
-  LeaguesIndexRoute: typeof LeaguesIndexRoute
-  TeamsIndexRoute: typeof TeamsIndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  SplatRoute: typeof SplatRoute
+  GuestIndexRoute: typeof GuestIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  StandingsRoute: StandingsRoute,
-  LeaguesLeagueIdRoute: LeaguesLeagueIdRoute,
-  TeamsTeamIdRoute: TeamsTeamIdRoute,
-  LeaguesIndexRoute: LeaguesIndexRoute,
-  TeamsIndexRoute: TeamsIndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  SplatRoute: SplatRoute,
+  GuestIndexRoute: GuestIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -191,31 +266,51 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/standings",
-        "/leagues/$leagueId",
-        "/teams/$teamId",
-        "/leagues/",
-        "/teams/"
+        "/_auth",
+        "/$",
+        "/guest/"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_auth": {
+      "filePath": "_auth/route.tsx",
+      "children": [
+        "/_auth/dashboard",
+        "/_auth/standings",
+        "/_auth/leagues/$leagueId",
+        "/_auth/teams/$teamId",
+        "/_auth/leagues/",
+        "/_auth/teams/"
+      ]
     },
-    "/standings": {
-      "filePath": "standings.tsx"
+    "/$": {
+      "filePath": "$.tsx"
     },
-    "/leagues/$leagueId": {
-      "filePath": "leagues.$leagueId.tsx"
+    "/_auth/dashboard": {
+      "filePath": "_auth/dashboard.tsx",
+      "parent": "/_auth"
     },
-    "/teams/$teamId": {
-      "filePath": "teams.$teamId.tsx"
+    "/_auth/standings": {
+      "filePath": "_auth/standings.tsx",
+      "parent": "/_auth"
     },
-    "/leagues/": {
-      "filePath": "leagues.index.tsx"
+    "/guest/": {
+      "filePath": "guest/index.tsx"
     },
-    "/teams/": {
-      "filePath": "teams.index.tsx"
+    "/_auth/leagues/$leagueId": {
+      "filePath": "_auth/leagues.$leagueId.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/teams/$teamId": {
+      "filePath": "_auth/teams.$teamId.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/leagues/": {
+      "filePath": "_auth/leagues.index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/teams/": {
+      "filePath": "_auth/teams.index.tsx",
+      "parent": "/_auth"
     }
   }
 }

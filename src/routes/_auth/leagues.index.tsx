@@ -3,10 +3,10 @@ import { zodValidator } from '@tanstack/zod-adapter'
 import { useDebounce } from '@uidotdev/usehooks'
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
-import { volleyApi } from '../services/volleyApi'
-import { loadQuery } from '../utils/loadQuery'
+import { volleyApi } from '../../services/volleyApi'
+import { loadQuery } from '../../utils/loadQuery'
 
-export const Route = createFileRoute('/teams/')({
+export const Route = createFileRoute('/_auth/leagues/')({
   component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
@@ -15,11 +15,11 @@ export const Route = createFileRoute('/teams/')({
   ),
   loaderDeps: ({ search: { filter } }) => ({ filter }),
   loader: async ({ deps: { filter } }) =>
-    loadQuery(volleyApi.endpoints.getTeams, { search: filter }),
+    loadQuery(volleyApi.endpoints.getLeagues, { search: filter }),
 })
 
 function RouteComponent() {
-  const teams = Route.useLoaderData()
+  const leagues = Route.useLoaderData()
   const routeSearch = Route.useSearch()
 
   const navigate = useNavigate({ from: Route.fullPath })
@@ -27,25 +27,28 @@ function RouteComponent() {
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
   useEffect(() => {
-    navigate({ to: '/teams', search: { filter: debouncedSearchTerm } })
+    navigate({ to: '/leagues', search: { filter: debouncedSearchTerm } })
   }, [debouncedSearchTerm])
 
   return (
-    <div>
+    <main>
       <label>Search: </label>
       <input
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       ></input>
       <ul>
-        {teams?.data?.response.map((team) => (
-          <li key={team.id}>
-            <Link to={`/teams/$teamId`} params={{ teamId: team.id.toString() }}>
-              {team.name}
+        {leagues?.data?.response.map((league) => (
+          <li key={league.id}>
+            <Link
+              to={`/leagues/$leagueId`}
+              params={{ leagueId: league.id.toString() }}
+            >
+              {league.name}
             </Link>
           </li>
         ))}
       </ul>
-    </div>
+    </main>
   )
 }

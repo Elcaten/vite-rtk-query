@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useGetStandingsQuery } from '../services/volleyApi'
+import { useGetStandingsQuery } from '../../services/volleyApi'
 
 type StandingsSearch =
   | {
@@ -8,7 +8,7 @@ type StandingsSearch =
     }
   | undefined
 
-export const Route = createFileRoute('/standings')({
+export const Route = createFileRoute('/_auth/standings')({
   component: RouteComponent,
   validateSearch: (search: Record<string, unknown>): StandingsSearch => {
     const leagueId = Number.parseInt((search?.leagueId as string) ?? '')

@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { volleyApi } from '../services/volleyApi'
-import { loadQuery } from '../utils/loadQuery'
+import { volleyApi } from '../../services/volleyApi'
+import { loadQuery } from '../../utils/loadQuery'
 
-export const Route = createFileRoute('/leagues/$leagueId')({
+export const Route = createFileRoute('/_auth/leagues/$leagueId')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const queryData = await loadQuery(volleyApi.endpoints.getLeagues, {

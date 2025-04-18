@@ -1,58 +1,21 @@
-import {
-  createFileRoute,
-  Link,
-  useNavigate,
-  useRouter,
-} from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-adapter'
 import { useDebounce } from '@uidotdev/usehooks'
 import { useEffect, useState } from 'react'
+import { z } from 'zod'
 import { volleyApi } from '../services/volleyApi'
-import { store } from '../store'
-
-type LeaguesSearch = {
-  filter: string
-}
+import { loadQuery } from '../utils/loadQuery'
 
 export const Route = createFileRoute('/leagues/')({
   component: RouteComponent,
-  validateSearch: (search: Record<string, unknown>): LeaguesSearch => {
-    const filter = (search?.filter as string) ?? ''
-
-    return {
-      filter,
-    }
-  },
+  validateSearch: zodValidator(
+    z.object({
+      filter: z.string().default(''),
+    }),
+  ),
   loaderDeps: ({ search: { filter } }) => ({ filter }),
-  loader: async ({ deps: { filter } }) => {
-    const result = await store.dispatch(
-      volleyApi.endpoints.getLeagues.initiate({
-        search: filter,
-      }),
-    )
-
-    if (result.isError) {
-      throw result.error
-    }
-
-    return result
-  },
-  errorComponent: ({ error, reset }) => {
-    const router = useRouter()
-
-    return (
-      <article>
-        <p>{error.message}</p>
-        <button
-          onClick={() => {
-            // Invalidate the route to reload the loader, which will also reset the error boundary
-            router.invalidate()
-          }}
-        >
-          retry
-        </button>
-      </article>
-    )
-  },
+  loader: async ({ deps: { filter } }) =>
+    loadQuery(volleyApi.endpoints.getLeagues, { search: filter }),
 })
 
 function RouteComponent() {

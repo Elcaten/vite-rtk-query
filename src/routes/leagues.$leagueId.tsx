@@ -1,35 +1,27 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useGetLeaguesQuery } from '../services/volleyApi'
+import { volleyApi } from '../services/volleyApi'
+import { loadQuery } from '../utils/loadQuery'
 
 export const Route = createFileRoute('/leagues/$leagueId')({
   component: RouteComponent,
+  loader: async ({ params }) => {
+    const queryData = await loadQuery(volleyApi.endpoints.getLeagues, {
+      id: Number(params.leagueId),
+    })
+    const league = queryData.data?.response?.[0]
+    if (!league) {
+      throw Error(`League with id ${params.leagueId} not found`)
+    }
+    return league
+  },
 })
 
 function RouteComponent() {
-  const { leagueId } = Route.useParams()
-  const { isError, isLoading, data } = useGetLeaguesQuery({
-    id: Number.parseInt(leagueId),
-  })
-
-  if (isLoading) {
-    return '...Loading'
-  }
-
-  if (isError) {
-    return 'Error'
-  }
-
-  const league = data?.response[0]
-
-  if (!league) {
-    return <div>League not found</div>
-  }
+  const league = Route.useLoaderData()
 
   return (
     <div>
-      <Link to="/leagues" search={{ filter: '' }}>
-        Back
-      </Link>
+      <Link to="/leagues">Back</Link>
       <div>{league.name}</div>
       <label>Seasons</label>
       <ul>

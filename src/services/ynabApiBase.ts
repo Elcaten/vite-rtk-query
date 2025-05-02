@@ -2,13 +2,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 // initialize an empty api service that we'll inject endpoints into later as needed
-export const volleyApiBase = createApi({
-  reducerPath: 'volleyApi',
+export const ynabApiBase = createApi({
+  reducerPath: 'ynabApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_VOLLEY_API_BASE_URL,
+    baseUrl: import.meta.env.VITE_YNAB_API_BASE_URL,
     headers: {
-      'x-rapidapi-host': import.meta.env.VITE_VOLLEY_API_X_RAPID_API_HOST,
-      'x-rapidapi-key': import.meta.env.VITE_VOLLEY_API_X_RAPID_API_KEY,
+      Authorization: `Bearer ${import.meta.env.VITE_YNAB_API_KEY}`,
     },
   }),
   endpoints: () => ({}),

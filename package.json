@@ -22,7 +22,8 @@
     "clean": "rimraf node_modules pnpm-lock.yaml dist",
     "validate": "./scripts/validate",
     "prepare": "husky",
-    "generate:api": "npx @rtk-query/codegen-openapi generate-api.cjs"
+    "generate:volley-api": "npx @rtk-query/codegen-openapi ./generate-api/generate-volley-api.cjs",
+    "generate:ynab-api": "npx @rtk-query/codegen-openapi ./generate-api/generate-ynab-api.cjs"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",

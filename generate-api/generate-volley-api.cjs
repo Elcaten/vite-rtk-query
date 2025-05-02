@@ -2,9 +2,9 @@
 const config = {
   //schemaFile: 'https://petstore3.swagger.io/api/v3/openapi.json',
   schemaFile: 'https://api-sports.io/public/documentations/volleyball-v1.yaml',
-  apiFile: './src/services/volleyApiBase.ts',
+  apiFile: '../src/services/volleyApiBase.ts',
   apiImport: 'volleyApiBase',
-  outputFile: './src/services/volleyApi.ts',
+  outputFile: '../src/services/volleyApi.ts',
   exportName: 'volleyApi',
   hooks: true,
 }

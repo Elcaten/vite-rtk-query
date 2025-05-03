@@ -3,9 +3,14 @@ const express = require('express')
 const cors = require('cors')
 const axios = require('axios')
 const rateLimit = require('express-rate-limit')
+const { body, query, validationResult } = require('express-validator')
 
 const app = express()
 const PORT = process.env.PORT || 3001
+
+// Request size limits
+app.use(express.json({ limit: '10kb' }))
+app.use(express.urlencoded({ extended: true, limit: '10kb' }))
 
 // Rate limiting configuration
 const generalLimiter = rateLimit({
@@ -55,6 +60,66 @@ const ALLOWED_ENDPOINTS = [
   '/api/v3.0/delete_expense',
 ]
 
+// Input validation middleware
+const validateInput = [
+  // Validate and sanitize query parameters
+  query('*').trim().escape(),
+
+  // Validate request body for POST/PUT requests
+  (req, res, next) => {
+    if (['POST', 'PUT'].includes(req.method)) {
+      body('*').trim().escape()(req, res, () => {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+          return res.status(400).json({
+            error: 'Invalid input',
+            details: errors.array(),
+          })
+        }
+        next()
+      })
+    } else {
+      next()
+    }
+  },
+
+  // Validate headers
+  (req, res, next) => {
+    const requiredHeaders = ['authorization']
+    const missingHeaders = requiredHeaders.filter(
+      (header) => !req.headers[header],
+    )
+
+    if (missingHeaders.length > 0) {
+      return res.status(400).json({
+        error: 'Missing required headers',
+        missing: missingHeaders,
+      })
+    }
+
+    // Validate Authorization header format
+    const authHeader = req.headers.authorization
+    if (!authHeader.startsWith('Bearer ')) {
+      return res.status(400).json({
+        error: 'Invalid Authorization header format',
+        message: 'Authorization header must start with "Bearer "',
+      })
+    }
+
+    // Sanitize and validate API key
+    const apiKey = authHeader.replace('Bearer ', '').trim()
+    if (!apiKey || apiKey.length < 32) {
+      return res.status(400).json({
+        error: 'Invalid API key',
+        message: 'API key must be at least 32 characters',
+      })
+    }
+
+    req.validatedApiKey = apiKey
+    next()
+  },
+]
+
 // Path validation middleware
 const validatePath = (req, res, next) => {
   const requestedPath = req.path
@@ -97,37 +162,31 @@ const validatePath = (req, res, next) => {
 }
 
 // Proxy middleware
-app.use('/', proxyLimiter, validatePath, async (req, res) => {
+app.use('/', proxyLimiter, validatePath, validateInput, async (req, res) => {
   try {
     const url = `${SPLITWISE_API_BASE}${req.normalizedPath}`
-
-    // Get the API key from the client's Authorization header
-    const apiKey = req.headers.authorization?.replace('Bearer ', '')
-
-    if (!apiKey) {
-      return res.status(401).json({
-        error: 'Unauthorized',
-        message: 'API key is required in the Authorization header',
-      })
-    }
 
     const response = await axios({
       method: req.method,
       url: url,
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${req.validatedApiKey}`,
         'Content-Type': 'application/json',
       },
       params: req.query,
       data: req.body,
+      maxContentLength: 10 * 1024 * 1024, // 10MB max response size
+      timeout: 10000, // 10 second timeout
     })
 
-    res.json(response.data)
+    // Sanitize response data
+    const sanitizedResponse = JSON.parse(JSON.stringify(response.data))
+    res.json(sanitizedResponse)
   } catch (error) {
     console.error('Proxy error:', error.message)
     res.status(error.response?.status || 500).json({
-      error: error.message,
-      details: error.response?.data,
+      error: 'Proxy error',
+      message: error.message,
     })
   }
 })

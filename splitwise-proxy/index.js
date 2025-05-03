@@ -2,19 +2,49 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const axios = require('axios')
+const rateLimit = require('express-rate-limit')
 
 const app = express()
 const PORT = process.env.PORT || 3001
 
+// Rate limiting configuration
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+
+const proxyLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // limit each IP to 50 requests per windowMs
+  message: 'Too many proxy requests from this IP, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+
+// CORS configuration
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : [],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  maxAge: 86400, // 24 hours
+}
+
 // Middleware
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
+app.use(generalLimiter) // Apply general rate limiting to all routes
 
 // Splitwise API configuration
 const SPLITWISE_API_BASE = process.env.SPLITWISE_API_BASE
 
 // Proxy middleware
-app.use('/splitwise-proxy', async (req, res) => {
+app.use('/splitwise-proxy', proxyLimiter, async (req, res) => {
   try {
     const url = `${SPLITWISE_API_BASE}${req.path.replace('/splitwise-proxy', '')}`
 

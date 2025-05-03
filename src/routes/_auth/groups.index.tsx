@@ -15,12 +15,12 @@ function RouteComponent() {
       <ul>
         {groups?.data?.groups?.map((group) => (
           <li key={group.id}>
-            {/* <Link
-                            to="/groups/$groupId"
-                            params={{ groupId: group.id?.toString() ?? '' }}
-                        > */}
-            {group.name}
-            {/* </Link> */}
+            <Link
+              to="/expenses/$groupId"
+              params={{ groupId: group.id?.toString() ?? '' }}
+            >
+              {group.name}'s' expenses
+            </Link>
           </li>
         ))}
       </ul>

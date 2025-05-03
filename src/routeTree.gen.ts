@@ -23,7 +23,8 @@ import { Route as AuthBudgetsIndexImport } from './routes/_auth/budgets.index'
 import { Route as AuthTeamsTeamIdImport } from './routes/_auth/teams.$teamId'
 import { Route as AuthLeaguesLeagueIdImport } from './routes/_auth/leagues.$leagueId'
 import { Route as AuthBudgetsBudgetIdImport } from './routes/_auth/budgets.$budgetId'
-import { Route as AuthAccountsAccountIdTransactionsImport } from './routes/_auth/accounts.$accountId.transactions'
+import { Route as AuthAccountsAccountIdImport } from './routes/_auth/accounts/$accountId'
+import { Route as AuthAccountsAccountIdTransactionsImport } from './routes/_auth/accounts/$accountId.transactions'
 
 // Create/Update Routes
 
@@ -98,11 +99,17 @@ const AuthBudgetsBudgetIdRoute = AuthBudgetsBudgetIdImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
+const AuthAccountsAccountIdRoute = AuthAccountsAccountIdImport.update({
+  id: '/accounts/$accountId',
+  path: '/accounts/$accountId',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
 const AuthAccountsAccountIdTransactionsRoute =
   AuthAccountsAccountIdTransactionsImport.update({
-    id: '/accounts/$accountId/transactions',
-    path: '/accounts/$accountId/transactions',
-    getParentRoute: () => AuthRouteRoute,
+    id: '/transactions',
+    path: '/transactions',
+    getParentRoute: () => AuthAccountsAccountIdRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -151,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuestIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_auth/accounts/$accountId': {
+      id: '/_auth/accounts/$accountId'
+      path: '/accounts/$accountId'
+      fullPath: '/accounts/$accountId'
+      preLoaderRoute: typeof AuthAccountsAccountIdImport
+      parentRoute: typeof AuthRouteImport
+    }
     '/_auth/budgets/$budgetId': {
       id: '/_auth/budgets/$budgetId'
       path: '/budgets/$budgetId'
@@ -195,41 +209,54 @@ declare module '@tanstack/react-router' {
     }
     '/_auth/accounts/$accountId/transactions': {
       id: '/_auth/accounts/$accountId/transactions'
-      path: '/accounts/$accountId/transactions'
+      path: '/transactions'
       fullPath: '/accounts/$accountId/transactions'
       preLoaderRoute: typeof AuthAccountsAccountIdTransactionsImport
-      parentRoute: typeof AuthRouteImport
+      parentRoute: typeof AuthAccountsAccountIdImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthAccountsAccountIdRouteChildren {
+  AuthAccountsAccountIdTransactionsRoute: typeof AuthAccountsAccountIdTransactionsRoute
+}
+
+const AuthAccountsAccountIdRouteChildren: AuthAccountsAccountIdRouteChildren = {
+  AuthAccountsAccountIdTransactionsRoute:
+    AuthAccountsAccountIdTransactionsRoute,
+}
+
+const AuthAccountsAccountIdRouteWithChildren =
+  AuthAccountsAccountIdRoute._addFileChildren(
+    AuthAccountsAccountIdRouteChildren,
+  )
+
 interface AuthRouteRouteChildren {
   AuthDashboardRoute: typeof AuthDashboardRoute
   AuthProfileRoute: typeof AuthProfileRoute
   AuthStandingsRoute: typeof AuthStandingsRoute
+  AuthAccountsAccountIdRoute: typeof AuthAccountsAccountIdRouteWithChildren
   AuthBudgetsBudgetIdRoute: typeof AuthBudgetsBudgetIdRoute
   AuthLeaguesLeagueIdRoute: typeof AuthLeaguesLeagueIdRoute
   AuthTeamsTeamIdRoute: typeof AuthTeamsTeamIdRoute
   AuthBudgetsIndexRoute: typeof AuthBudgetsIndexRoute
   AuthLeaguesIndexRoute: typeof AuthLeaguesIndexRoute
   AuthTeamsIndexRoute: typeof AuthTeamsIndexRoute
-  AuthAccountsAccountIdTransactionsRoute: typeof AuthAccountsAccountIdTransactionsRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthDashboardRoute: AuthDashboardRoute,
   AuthProfileRoute: AuthProfileRoute,
   AuthStandingsRoute: AuthStandingsRoute,
+  AuthAccountsAccountIdRoute: AuthAccountsAccountIdRouteWithChildren,
   AuthBudgetsBudgetIdRoute: AuthBudgetsBudgetIdRoute,
   AuthLeaguesLeagueIdRoute: AuthLeaguesLeagueIdRoute,
   AuthTeamsTeamIdRoute: AuthTeamsTeamIdRoute,
   AuthBudgetsIndexRoute: AuthBudgetsIndexRoute,
   AuthLeaguesIndexRoute: AuthLeaguesIndexRoute,
   AuthTeamsIndexRoute: AuthTeamsIndexRoute,
-  AuthAccountsAccountIdTransactionsRoute:
-    AuthAccountsAccountIdTransactionsRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
@@ -243,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthProfileRoute
   '/standings': typeof AuthStandingsRoute
   '/guest': typeof GuestIndexRoute
+  '/accounts/$accountId': typeof AuthAccountsAccountIdRouteWithChildren
   '/budgets/$budgetId': typeof AuthBudgetsBudgetIdRoute
   '/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
   '/teams/$teamId': typeof AuthTeamsTeamIdRoute
@@ -259,6 +287,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthProfileRoute
   '/standings': typeof AuthStandingsRoute
   '/guest': typeof GuestIndexRoute
+  '/accounts/$accountId': typeof AuthAccountsAccountIdRouteWithChildren
   '/budgets/$budgetId': typeof AuthBudgetsBudgetIdRoute
   '/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
   '/teams/$teamId': typeof AuthTeamsTeamIdRoute
@@ -276,6 +305,7 @@ export interface FileRoutesById {
   '/_auth/profile': typeof AuthProfileRoute
   '/_auth/standings': typeof AuthStandingsRoute
   '/guest/': typeof GuestIndexRoute
+  '/_auth/accounts/$accountId': typeof AuthAccountsAccountIdRouteWithChildren
   '/_auth/budgets/$budgetId': typeof AuthBudgetsBudgetIdRoute
   '/_auth/leagues/$leagueId': typeof AuthLeaguesLeagueIdRoute
   '/_auth/teams/$teamId': typeof AuthTeamsTeamIdRoute
@@ -288,49 +318,52 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | ''
-    | '/$'
-    | '/dashboard'
-    | '/profile'
-    | '/standings'
-    | '/guest'
-    | '/budgets/$budgetId'
-    | '/leagues/$leagueId'
-    | '/teams/$teamId'
-    | '/budgets'
-    | '/leagues'
-    | '/teams'
-    | '/accounts/$accountId/transactions'
+  | ''
+  | '/$'
+  | '/dashboard'
+  | '/profile'
+  | '/standings'
+  | '/guest'
+  | '/accounts/$accountId'
+  | '/budgets/$budgetId'
+  | '/leagues/$leagueId'
+  | '/teams/$teamId'
+  | '/budgets'
+  | '/leagues'
+  | '/teams'
+  | '/accounts/$accountId/transactions'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | ''
-    | '/$'
-    | '/dashboard'
-    | '/profile'
-    | '/standings'
-    | '/guest'
-    | '/budgets/$budgetId'
-    | '/leagues/$leagueId'
-    | '/teams/$teamId'
-    | '/budgets'
-    | '/leagues'
-    | '/teams'
-    | '/accounts/$accountId/transactions'
+  | ''
+  | '/$'
+  | '/dashboard'
+  | '/profile'
+  | '/standings'
+  | '/guest'
+  | '/accounts/$accountId'
+  | '/budgets/$budgetId'
+  | '/leagues/$leagueId'
+  | '/teams/$teamId'
+  | '/budgets'
+  | '/leagues'
+  | '/teams'
+  | '/accounts/$accountId/transactions'
   id:
-    | '__root__'
-    | '/_auth'
-    | '/$'
-    | '/_auth/dashboard'
-    | '/_auth/profile'
-    | '/_auth/standings'
-    | '/guest/'
-    | '/_auth/budgets/$budgetId'
-    | '/_auth/leagues/$leagueId'
-    | '/_auth/teams/$teamId'
-    | '/_auth/budgets/'
-    | '/_auth/leagues/'
-    | '/_auth/teams/'
-    | '/_auth/accounts/$accountId/transactions'
+  | '__root__'
+  | '/_auth'
+  | '/$'
+  | '/_auth/dashboard'
+  | '/_auth/profile'
+  | '/_auth/standings'
+  | '/guest/'
+  | '/_auth/accounts/$accountId'
+  | '/_auth/budgets/$budgetId'
+  | '/_auth/leagues/$leagueId'
+  | '/_auth/teams/$teamId'
+  | '/_auth/budgets/'
+  | '/_auth/leagues/'
+  | '/_auth/teams/'
+  | '/_auth/accounts/$accountId/transactions'
   fileRoutesById: FileRoutesById
 }
 
@@ -367,13 +400,13 @@ export const routeTree = rootRoute
         "/_auth/dashboard",
         "/_auth/profile",
         "/_auth/standings",
+        "/_auth/accounts/$accountId",
         "/_auth/budgets/$budgetId",
         "/_auth/leagues/$leagueId",
         "/_auth/teams/$teamId",
         "/_auth/budgets/",
         "/_auth/leagues/",
-        "/_auth/teams/",
-        "/_auth/accounts/$accountId/transactions"
+        "/_auth/teams/"
       ]
     },
     "/$": {
@@ -393,6 +426,13 @@ export const routeTree = rootRoute
     },
     "/guest/": {
       "filePath": "guest/index.tsx"
+    },
+    "/_auth/accounts/$accountId": {
+      "filePath": "_auth/accounts/$accountId.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/accounts/$accountId/transactions"
+      ]
     },
     "/_auth/budgets/$budgetId": {
       "filePath": "_auth/budgets.$budgetId.tsx",
@@ -419,8 +459,8 @@ export const routeTree = rootRoute
       "parent": "/_auth"
     },
     "/_auth/accounts/$accountId/transactions": {
-      "filePath": "_auth/accounts.$accountId.transactions.tsx",
-      "parent": "/_auth"
+      "filePath": "_auth/accounts/$accountId.transactions.tsx",
+      "parent": "/_auth/accounts/$accountId"
     }
   }
 }

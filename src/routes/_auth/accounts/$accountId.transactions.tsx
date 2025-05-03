@@ -1,11 +1,23 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { ynabApi } from '../../services/ynabApi'
-import { loadQuery } from '../../utils/loadQuery'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { z } from 'zod'
+import { ynabApi } from '../../../services/ynabApi'
+import { loadQuery } from '../../../utils/loadQuery'
 
 export const Route = createFileRoute('/_auth/accounts/$accountId/transactions')(
   {
     component: RouteComponent,
-    loader: async ({ params }) => {
+    validateSearch: zodValidator(
+      z.object({
+        budgetId: z.string(),
+      }),
+    ),
+    loaderDeps: ({ search: { budgetId } }) => ({ budgetId }),
+    loader: async ({ params, deps }) => {
+      if (!deps.budgetId) {
+        throw new Error('No budgetId provided')
+      }
+
       const oneWeekAgo = new Date()
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
       const sinceDate = oneWeekAgo.toISOString().split('T')[0]
@@ -13,7 +25,7 @@ export const Route = createFileRoute('/_auth/accounts/$accountId/transactions')(
       const queryData = await loadQuery(
         ynabApi.endpoints.getTransactionsByAccount,
         {
-          budgetId: 'last-used',
+          budgetId: deps.budgetId,
           accountId: params.accountId,
           sinceDate,
         },
@@ -27,7 +39,10 @@ export const Route = createFileRoute('/_auth/accounts/$accountId/transactions')(
 )
 
 function RouteComponent() {
-  const { transactions } = Route.useLoaderData()
+  const data = Route.useLoaderData()
+  const params = Route.useParams()
+  const search = Route.useSearch()
+
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
@@ -39,7 +54,12 @@ function RouteComponent() {
 
   return (
     <div>
-      <h1>Recent Transactions</h1>
+      <Link to="/accounts/$accountId" params={{ accountId: params.accountId }} search={{ budgetId: search.budgetId }}>
+        Back to account
+      </Link>
+      <h1>
+        Recent Transactions
+      </h1>
       <table>
         <thead>
           <tr>
@@ -50,7 +70,7 @@ function RouteComponent() {
           </tr>
         </thead>
         <tbody>
-          {transactions.map((transaction) => (
+          {data.transactions.map((transaction) => (
             <tr key={transaction.id}>
               <td>{dateFormatter.format(new Date(transaction.date))}</td>
               <td>{transaction.payee_name}</td>

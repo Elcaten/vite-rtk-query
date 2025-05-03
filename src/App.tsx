@@ -12,6 +12,14 @@ const router = createRouter({
   context: {
     auth: authPromise,
   },
+  // defaultErrorComponent: (error) => {
+  //   return (
+  //     <div>
+  //       <Link to="/budgets">Go to budgets</Link>
+  //       <ErrorComponent {...error} />
+  //     </div>
+  //   )
+  // },
 })
 
 // Register the router instance for type safety

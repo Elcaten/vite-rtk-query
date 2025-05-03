@@ -18,7 +18,7 @@ export const Route = createFileRoute('/_auth/budgets/$budgetId')({
 
 function RouteComponent() {
   const budget = Route.useLoaderData()
-
+  const params = Route.useParams()
   return (
     <div>
       <Link to="/budgets">Back</Link>
@@ -36,6 +36,7 @@ function RouteComponent() {
               <Link
                 to={`/accounts/$accountId/transactions`}
                 params={{ accountId: account.id }}
+                search={{ budgetId: params.budgetId }}
               >
                 {account.name}
               </Link>

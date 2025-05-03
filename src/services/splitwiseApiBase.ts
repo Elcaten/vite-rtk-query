@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const splitwiseApiBase = createApi({
   reducerPath: 'splitwiseApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_SPLITWISE_API_BASE_URL,
+    baseUrl: import.meta.env.VITE_SPLITWISE_PROXY_BASE_URL,
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_SPLITWISE_API_KEY}`,
     },

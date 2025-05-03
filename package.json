@@ -23,7 +23,8 @@
     "validate": "./scripts/validate",
     "prepare": "husky",
     "generate:volley-api": "npx @rtk-query/codegen-openapi ./generate-api/generate-volley-api.cjs",
-    "generate:ynab-api": "npx @rtk-query/codegen-openapi ./generate-api/generate-ynab-api.cjs"
+    "generate:ynab-api": "npx @rtk-query/codegen-openapi ./generate-api/generate-ynab-api.cjs",
+    "generate:splitwise-api": "npx @rtk-query/codegen-openapi ./generate-api/generate-splitwise-api.cjs"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",

@@ -54,12 +54,10 @@ function RouteComponent() {
 
   return (
     <div>
-      <Link to="/accounts/$accountId" params={{ accountId: params.accountId }} search={{ budgetId: search.budgetId }}>
+      {/* <Link to="/accounts/$accountId" params={{ accountId: params.accountId }} search={{ budgetId: search.budgetId }}>
         Back to account
-      </Link>
-      <h1>
-        Recent Transactions
-      </h1>
+      </Link> */}
+      <h1>Recent Transactions</h1>
       <table>
         <thead>
           <tr>

@@ -35,6 +35,9 @@ function RouteComponent() {
           <li>
             <Link to="/budgets">Budgets</Link>
           </li>
+          <li>
+            <Link to="/groups">Groups</Link>
+          </li>
         </ul>
         <div
           style={{
